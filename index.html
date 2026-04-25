@@ -94,12 +94,6 @@ input, select, textarea {
   background: #f8fafc;
 }
 
-input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: #0b3b82;
-  background: #fff;
-}
-
 .section-title {
   margin: 16px 0 10px;
   padding: 11px;
@@ -150,9 +144,8 @@ button {
   cursor: pointer;
 }
 
-.save { background: #0b3b82; }
-.pdf { background: #15803d; }
-.clear { background: #dc2626; }
+.savepdf { background: #15803d; }
+.close { background: #dc2626; }
 
 #msg {
   text-align: center;
@@ -168,20 +161,149 @@ button {
   font-size: 11px;
 }
 
-@media print {
-  body {
-    background: white;
-    padding: 0;
-  }
+/* PDF DESIGN */
+.pdf-temp {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 210mm;
+  background: white;
+  z-index: 999999;
+  opacity: 1;
+}
 
-  .buttons, #msg {
-    display: none;
-  }
+.pdf-page {
+  width: 210mm;
+  height: 297mm;
+  padding: 7mm;
+  background: white;
+  font-family: Tahoma, Arial, sans-serif;
+  direction: rtl;
+  color: #111827;
+}
 
-  .container {
-    box-shadow: none;
-    border-radius: 0;
-  }
+.pdf-header {
+  background: linear-gradient(135deg, #061b3a, #0b3b82);
+  color: white;
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pdf-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pdf-logo {
+  width: 42px;
+  height: 42px;
+  background: white;
+  border-radius: 8px;
+  padding: 4px;
+  object-fit: contain;
+}
+
+.pdf-company {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.pdf-sub {
+  font-size: 9px;
+  color: #dbeafe;
+}
+
+.pdf-title {
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.pdf-info {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.pdf-box {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 5px;
+}
+
+.pdf-label {
+  font-size: 8px;
+  color: #475569;
+}
+
+.pdf-value {
+  font-size: 10px;
+  font-weight: bold;
+  margin-top: 2px;
+}
+
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  font-size: 8.2px;
+}
+
+.pdf-table th {
+  background: #061b3a;
+  color: white;
+  border: 1px solid #061b3a;
+  padding: 4px;
+}
+
+.pdf-table td {
+  border: 1px solid #cbd5e1;
+  padding: 3px 4px;
+}
+
+.pdf-table td:nth-child(1) {
+  width: 8mm;
+  text-align: center;
+}
+
+.pdf-table td:nth-child(3) {
+  width: 18mm;
+  text-align: center;
+  font-weight: bold;
+}
+
+.pdf-notes {
+  margin-top: 7px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 6px;
+  min-height: 28px;
+  font-size: 9px;
+}
+
+.pdf-sign {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.pdf-sign div {
+  border-top: 1px solid #334155;
+  padding-top: 5px;
+  font-size: 9px;
+  text-align: center;
+}
+
+.pdf-footer {
+  margin-top: 6px;
+  text-align: center;
+  font-size: 8px;
+  color: #64748b;
 }
 
 @media (min-width: 700px) {
@@ -190,7 +312,7 @@ button {
   }
 
   .buttons {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 </style>
@@ -198,7 +320,7 @@ button {
 
 <body>
 
-<div class="container" id="reportArea">
+<div class="container">
 
   <div class="header">
     <img src="logo.png" class="logo" alt="SMOU Group Logo">
@@ -257,16 +379,14 @@ button {
     </div>
 
     <div class="section-title">بنود الصيانة</div>
-
     <div id="items"></div>
 
     <div class="section-title">ملاحظات</div>
     <textarea name="notes" placeholder="ملاحظات"></textarea>
 
     <div class="buttons">
-      <button type="submit" class="save">حفظ في Google Sheet</button>
-      <button type="button" class="pdf" onclick="sharePDF()">PDF + واتساب</button>
-      <button type="button" class="clear" onclick="location.reload()">تقرير جديد</button>
+      <button type="button" class="savepdf" onclick="saveAndSharePDF()">حفظ في Google Sheet + إرسال PDF</button>
+      <button type="button" class="close" onclick="window.close()">إغلاق</button>
     </div>
 
     <div id="msg"></div>
@@ -328,13 +448,9 @@ function init() {
 
 init();
 
-document.getElementById("form").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const msg = document.getElementById("msg");
-  msg.innerHTML = "جاري الحفظ...";
-
-  const formData = new FormData(this);
+function collectData() {
+  const form = document.getElementById("form");
+  const formData = new FormData(form);
 
   for (let i = 1; i <= 18; i++) {
     if (!formData.has("item" + i)) {
@@ -342,30 +458,169 @@ document.getElementById("form").addEventListener("submit", function(e) {
     }
   }
 
-  fetch(SCRIPT_URL, {
+  return formData;
+}
+
+async function saveToSheet(formData) {
+  await fetch(SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
     body: formData
   });
+}
 
-  msg.innerHTML = "✔ تم إرسال البيانات إلى Google Sheet";
-});
+async function saveAndSharePDF() {
+  const msg = document.getElementById("msg");
+  msg.innerHTML = "جاري الحفظ وإنشاء PDF...";
 
-async function sharePDF() {
-  const element = document.getElementById("reportArea");
-  const reportNo = document.getElementById("reportNo").value;
-  const fileName = "SMOU-Maintenance-Report-" + reportNo + ".pdf";
+  const formData = collectData();
+
+  await saveToSheet(formData);
+
+  const data = Object.fromEntries(formData.entries());
+  await createAndSharePDF(data);
+
+  msg.innerHTML = "✔ تم الحفظ وفتح مشاركة PDF";
+}
+
+async function createAndSharePDF(data) {
+  let rows = "";
+
+  items.forEach((item, index) => {
+    const status = data["item" + (index + 1)] === "تم" ? "✓ تم" : "لم يتم";
+
+    rows += `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${item}</td>
+        <td>${status}</td>
+      </tr>
+    `;
+  });
+
+  const fileName = "SMOU-Maintenance-Report-" + (data.reportNo || "Report") + ".pdf";
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "pdf-temp";
+
+  wrapper.innerHTML = `
+    <div class="pdf-page" id="pdfPage">
+
+      <div class="pdf-header">
+        <div class="pdf-brand">
+          <img src="logo.png" class="pdf-logo">
+          <div>
+            <div class="pdf-company">مجموعة سمو</div>
+            <div class="pdf-sub">SMOU Group - Elevators & Air Conditioning</div>
+          </div>
+        </div>
+        <div class="pdf-title">تقرير صيانة المصعد</div>
+      </div>
+
+      <div class="pdf-info">
+        <div class="pdf-box">
+          <div class="pdf-label">التاريخ</div>
+          <div class="pdf-value">${data.date || ""}</div>
+        </div>
+
+        <div class="pdf-box">
+          <div class="pdf-label">الوقت</div>
+          <div class="pdf-value">${data.time || ""}</div>
+        </div>
+
+        <div class="pdf-box">
+          <div class="pdf-label">رقم التقرير</div>
+          <div class="pdf-value">${data.reportNo || ""}</div>
+        </div>
+
+        <div class="pdf-box">
+          <div class="pdf-label">رقم العقد</div>
+          <div class="pdf-value">${data.contractNo || ""}</div>
+        </div>
+
+        <div class="pdf-box">
+          <div class="pdf-label">اسم العميل</div>
+          <div class="pdf-value">${data.customerName || ""}</div>
+        </div>
+
+        <div class="pdf-box">
+          <div class="pdf-label">الموقع</div>
+          <div class="pdf-value">${data.location || ""}</div>
+        </div>
+
+        <div class="pdf-box">
+          <div class="pdf-label">الفني</div>
+          <div class="pdf-value">${data.technician || ""}</div>
+        </div>
+
+        <div class="pdf-box">
+          <div class="pdf-label">نوع التقرير</div>
+          <div class="pdf-value">صيانة دورية</div>
+        </div>
+      </div>
+
+      <table class="pdf-table">
+        <thead>
+          <tr>
+            <th>م</th>
+            <th>بند الفحص والصيانة</th>
+            <th>الحالة</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+
+      <div class="pdf-notes">
+        <strong>ملاحظات:</strong><br>
+        ${data.notes || "لا توجد ملاحظات"}
+      </div>
+
+      <div class="pdf-sign">
+        <div>توقيع الفني</div>
+        <div>توقيع العميل</div>
+      </div>
+
+      <div class="pdf-footer">
+        SMOU Group - Elevators & Air Conditioning | Maintenance Report
+      </div>
+
+    </div>
+  `;
+
+  document.body.appendChild(wrapper);
+
+  await new Promise(resolve => setTimeout(resolve, 700));
+
+  const element = document.getElementById("pdfPage");
 
   const opt = {
-    margin: 5,
+    margin: 0,
     filename: fileName,
     image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true },
-    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      scrollX: 0,
+      scrollY: 0,
+      windowWidth: 794,
+      windowHeight: 1123
+    },
+    jsPDF: {
+      unit: "mm",
+      format: "a4",
+      orientation: "portrait"
+    },
+    pagebreak: {
+      mode: ["avoid-all"]
+    }
   };
 
   const worker = html2pdf().set(opt).from(element);
   const pdfBlob = await worker.outputPdf("blob");
+
+  document.body.removeChild(wrapper);
 
   const file = new File([pdfBlob], fileName, {
     type: "application/pdf"
@@ -378,8 +633,12 @@ async function sharePDF() {
       files: [file]
     });
   } else {
-    html2pdf().set(opt).from(element).save();
-    window.open("https://wa.me/?text=تم إنشاء تقرير صيانة المصعد - SMOU Group", "_blank");
+    const url = URL.createObjectURL(pdfBlob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(url);
   }
 }
 </script>

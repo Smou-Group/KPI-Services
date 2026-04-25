@@ -1,92 +1,236 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<title>كشف العائلة</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تقرير صيانة المصعد</title>
 
 <style>
-body{
+body {
+  margin: 0;
   font-family: Tahoma, Arial;
-  background:#f7f7f7;
-  padding:20px;
+  background: #f4f7fb;
 }
-h2{margin-bottom:10px}
-input{
-  padding:10px;
-  width:300px;
-  font-size:16px;
+
+.container {
+  max-width: 1200px;
+  margin: 30px auto;
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:15px;
-  background:#fff;
+
+h1 {
+  text-align: center;
+  color: #0b3b82;
 }
-th,td{
-  border:1px solid #ccc;
-  padding:10px;
-  text-align:right;
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
 }
-th{
-  background:#0f5c6e;
-  color:#fff;
+
+label {
+  font-weight: bold;
+  color: #0b3b82;
 }
-tr:nth-child(even){background:#f2f2f2}
-.note{color:#666;margin-top:8px}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background: #0b3b82;
+  color: white;
+}
+
+td:nth-child(2) {
+  text-align: right;
+  font-weight: bold;
+}
+
+select {
+  padding: 6px;
+  border-radius: 6px;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 20px;
+  background: #0b3b82;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #062b61;
+}
+
+.message {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
 </head>
 
 <body>
 
-<h2>🔎 البحث باسم العائلة</h2>
+<div class="container">
+<h1>تقرير صيانة المصعد</h1>
 
-<input id="search" placeholder="اكتب اسم العائلة" />
-<div class="note" id="info">يرجى رفع ملف البيانات</div>
-<br><br>
-<input type="file" id="file" accept=".csv">
+<form id="form">
 
-<table id="table" style="display:none">
-  <thead></thead>
-  <tbody></tbody>
+<div class="grid">
+  <div>
+    <label>التاريخ</label>
+    <input type="date" name="date" required>
+  </div>
+
+  <div>
+    <label>الوقت</label>
+    <input type="time" name="time" required>
+  </div>
+
+  <div>
+    <label>رقم التقرير</label>
+    <input type="text" name="reportNo" required>
+  </div>
+
+  <div>
+    <label>رقم العقد</label>
+    <input type="text" name="contractNo" required>
+  </div>
+
+  <div>
+    <label>اسم العميل</label>
+    <input type="text" name="customerName" required>
+  </div>
+
+  <div>
+    <label>الموقع</label>
+    <input type="text" name="location" required>
+  </div>
+
+  <div>
+    <label>الفني</label>
+    <input type="text" name="technician" required>
+  </div>
+</div>
+
+<table>
+<thead>
+<tr>
+  <th>م</th>
+  <th>البند</th>
+  <th>الحالة</th>
+</tr>
+</thead>
+
+<tbody id="items"></tbody>
 </table>
 
-<script>
-let data=[], headers=[];
-const FAMILY_COL = "العائلة";
+<button type="submit">حفظ في Google Sheet</button>
 
-document.getElementById("file").addEventListener("change", async e=>{
-  const text = await e.target.files[0].text();
-  const lines = text.trim().split("\n");
-  headers = lines[0].split(",");
-  data = lines.slice(1).map(l=>{
-    let obj={};
-    l.split(",").forEach((v,i)=>obj[headers[i]]=v);
-    return obj;
-  });
-  document.getElementById("info").innerText="تم تحميل البيانات";
+<div class="message" id="msg"></div>
+
+</form>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/a/macros/smou.ae/s/AKfycbzLB-yQsZW4ZQPKvrKcZ4DNPtJiGt9yoR44u7uPxoz1x1hXyF8O4N_RUKuy-3RR4LuaHw/exec";
+
+const list = [
+"التأكد من عمل التكييف وتنظيف الماكينة من الغبار والأتربة",
+"التأكد من فتح وغلق الفرامل",
+"التحقق من منسوب زيت الماكينة",
+"التحقق من الباور والانتباه جيدًا لعلامات التآكل",
+"التحقق من جودة تشغيل الكنترول",
+"تنظيف الكنترول بواسطة البلور",
+"تنظيف أعلى الكابينة من الغبار والأتربة",
+"التأكد من عدم ارتخاء الويرات وجودة التثبيت",
+"إضافة زيت إلى الزوايا",
+"تربيط سكة النقل",
+"استخدام WD40 للأجزاء المتحركة في الباب",
+"مراجعة دوائر الأمان وشوك الأبواب الداخلي والخارجي",
+"التحقق من سلامة مكونات الكابينة الداخلية (إضاءة - مروحة - ماسك الديكور - أرضية)",
+"فحص لوحة المفاتيح والتأكد من مدى استجابتها للعمل",
+"اختبار مفتاح Alarm",
+"التحقق من تسارع الكابينة وتباطؤها ودقة ضبطها أثناء السير لأعلى وأسفل",
+"التأكد من عمل حركة الأبواب بسلاسة",
+"التأكد من وقوف الكابينة على كل مستوى بدقة ونظافة مجرى باب الكابينة"
+];
+
+const tbody = document.getElementById("items");
+
+list.forEach((item, i) => {
+  tbody.innerHTML += `
+  <tr>
+    <td>${i+1}</td>
+    <td>${item}</td>
+    <td>
+      <select name="item${i+1}" required>
+        <option value="">اختر</option>
+        <option value="تم">✔ تم</option>
+        <option value="لم يتم">✖ لم يتم</option>
+        <option value="يحتاج متابعة">⚠ يحتاج متابعة</option>
+      </select>
+    </td>
+  </tr>`;
 });
 
-document.getElementById("search").addEventListener("input",()=>{
-  const q = document.getElementById("search").value.trim();
-  const table = document.getElementById("table");
-  const thead = table.querySelector("thead");
-  const tbody = table.querySelector("tbody");
+document.getElementById("form").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-  if(!q){ table.style.display="none"; return; }
+  const msg = document.getElementById("msg");
+  msg.innerHTML = "جاري الحفظ...";
 
-  const norm = s => (s||"").toString().trim().replace(/\s+/g," ");
-const res = data.filter(r => norm(r[FAMILY_COL]).includes(norm(q)));
+  const data = Object.fromEntries(new FormData(e.target).entries());
 
-  if(!res.length){
-    document.getElementById("info").innerText="لا توجد نتائج";
-    table.style.display="none";
-    return;
+  try {
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    msg.style.color = "green";
+    msg.innerHTML = "✔ تم حفظ البيانات بنجاح";
+    e.target.reset();
+
+  } catch (err) {
+    msg.style.color = "red";
+    msg.innerHTML = "❌ حصل خطأ";
   }
-
-  thead.innerHTML="<tr>"+headers.map(h=>`<th>${h}</th>`).join("")+"</tr>";
-  tbody.innerHTML=res.map(r=>"<tr>"+headers.map(h=>`<td>${r[h]||""}</td>`).join("")+"</tr>").join("");
-  table.style.display="table";
-  document.getElementById("info").innerText=`عدد النتائج: ${res.length}`;
 });
 </script>
 

@@ -8,14 +8,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
-@page {
-  size: A4 portrait;
-  margin: 5mm;
-}
+@page { size: A4; margin: 5mm; }
 
 body {
   margin: 0;
-  font-family: Tahoma, Arial;
+  font-family: Tahoma;
   background: #f4f7fb;
 }
 
@@ -25,44 +22,29 @@ body {
   background: white;
   padding: 12px;
   border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
 h1 {
   text-align: center;
   color: #0b3b82;
-  font-size: 24px;
-  margin: 5px 0 15px;
+  font-size: 22px;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
-  margin-bottom: 10px;
 }
 
 label {
-  font-weight: bold;
-  color: #0b3b82;
-  display: block;
-  margin-bottom: 4px;
   font-size: 12px;
+  font-weight: bold;
 }
 
 input, select, textarea {
   width: 100%;
-  padding: 7px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-  font-family: Tahoma, Arial;
+  padding: 6px;
   font-size: 12px;
-}
-
-input[readonly] {
-  background: #eef3f9;
-  font-weight: bold;
 }
 
 table {
@@ -74,7 +56,7 @@ table {
 
 th, td {
   border: 1px solid #ddd;
-  padding: 5px;
+  padding: 4px;
   text-align: center;
 }
 
@@ -85,72 +67,32 @@ th {
 
 td:nth-child(2) {
   text-align: right;
-  font-weight: bold;
-}
-
-.check {
-  width: 18px;
-  height: 18px;
-}
-
-.notes {
-  margin-top: 10px;
-}
-
-textarea {
-  height: 55px;
-  resize: none;
 }
 
 .buttons {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-top: 12px;
+  grid-template-columns: repeat(4,1fr);
+  gap: 6px;
+  margin-top: 10px;
 }
 
 button {
-  padding: 11px;
-  background: #0b3b82;
-  color: white;
+  padding: 10px;
   border: none;
-  border-radius: 8px;
-  font-size: 15px;
+  color: white;
+  font-weight: bold;
   cursor: pointer;
-  font-weight: bold;
 }
 
-.print-btn { background: #198754; }
-.edit-btn { background: #f59e0b; }
-.close-btn { background: #dc3545; }
+.save { background: #0b3b82; }
+.print { background: green; }
+.edit { background: orange; }
+.close { background: red; }
 
-.message {
-  text-align: center;
-  margin-top: 8px;
-  font-weight: bold;
-}
+textarea { height: 50px; }
 
 @media print {
-  body {
-    background: white;
-  }
-
-  .container {
-    box-shadow: none;
-    margin: 0;
-    max-width: 100%;
-    border-radius: 0;
-  }
-
-  .buttons, .message {
-    display: none !important;
-  }
-}
-
-@media (max-width: 768px) {
-  .grid, .buttons {
-    grid-template-columns: 1fr;
-  }
+  .buttons { display:none; }
 }
 </style>
 </head>
@@ -164,75 +106,41 @@ button {
 <form id="form">
 
 <div class="grid">
+<input name="date" id="date" readonly>
+<input name="time" id="time" readonly>
+<input name="reportNo" id="reportNo" readonly>
 
-  <div>
-    <label>التاريخ</label>
-    <input type="text" name="date" id="date" readonly>
-  </div>
+<input name="contractNo" placeholder="رقم العقد">
+<input name="customerName" placeholder="اسم العميل">
+<input name="location" placeholder="الموقع">
 
-  <div>
-    <label>الوقت</label>
-    <input type="text" name="time" id="time" readonly>
-  </div>
-
-  <div>
-    <label>رقم التقرير</label>
-    <input type="text" name="reportNo" id="reportNo" readonly>
-  </div>
-
-  <div>
-    <label>رقم العقد</label>
-    <input type="text" name="contractNo" required>
-  </div>
-
-  <div>
-    <label>اسم العميل</label>
-    <input type="text" name="customerName" required>
-  </div>
-
-  <div>
-    <label>الموقع</label>
-    <input type="text" name="location" required>
-  </div>
-
-  <div>
-    <label>الفني</label>
-    <select name="technician" required>
-      <option value="">اختر الفني</option>
-      <option value="احمد">احمد</option>
-      <option value="سيد">سيد</option>
-      <option value="محمد">محمد</option>
-      <option value="علي">علي</option>
-      <option value="خالد">خالد</option>
-    </select>
-  </div>
-
+<select name="technician">
+<option>اختر الفني</option>
+<option>احمد</option>
+<option>سيد</option>
+<option>محمد</option>
+<option>علي</option>
+<option>خالد</option>
+</select>
 </div>
 
 <table>
 <thead>
-<tr>
-  <th>م</th>
-  <th>البند</th>
-  <th>تم</th>
-</tr>
+<tr><th>م</th><th>البند</th><th>✔</th></tr>
 </thead>
 <tbody id="items"></tbody>
 </table>
 
-<div class="notes">
-  <label>ملاحظات</label>
-  <textarea name="notes" rows="3" placeholder="اكتب الملاحظات هنا..."></textarea>
-</div>
+<textarea name="notes" placeholder="ملاحظات"></textarea>
 
 <div class="buttons">
-  <button type="submit">حفظ</button>
-  <button type="button" class="print-btn" onclick="generatePDFWhatsApp()">PDF + WhatsApp</button>
-  <button type="button" class="edit-btn" onclick="enableEdit()">تعديل</button>
-  <button type="button" class="close-btn" onclick="closePage()">إغلاق</button>
+<button class="save" type="submit">حفظ</button>
+<button class="print" type="button" onclick="pdf()">PDF + واتساب</button>
+<button class="edit" type="button" onclick="enable()">تعديل</button>
+<button class="close" type="button" onclick="window.close()">إغلاق</button>
 </div>
 
-<div class="message" id="msg"></div>
+<div id="msg"></div>
 
 </form>
 </div>
@@ -241,167 +149,81 @@ button {
 const SCRIPT_URL = "https://script.google.com/a/macros/smou.ae/s/AKfycbzLB-yQsZW4ZQPKvrKcZ4DNPtJiGt9yoR44u7uPxoz1x1hXyF8O4N_RUKuy-3RR4LuaHw/exec";
 
 const list = [
-"التأكد من عمل التكييف وتنظيف الماكينة من الغبار والأتربة",
-"التأكد من فتح وغلق الفرامل",
-"التحقق من منسوب زيت الماكينة",
-"التحقق من الباور والانتباه جيدًا لعلامات التآكل",
-"التحقق من جودة تشغيل الكنترول",
-"تنظيف الكنترول بواسطة البلور",
-"تنظيف أعلى الكابينة من الغبار والأتربة",
-"التأكد من عدم ارتخاء الويرات وجودة التثبيت",
-"إضافة زيت إلى الزوايا",
-"تربيط سكة النقل",
-"استخدام WD40 للأجزاء المتحركة في الباب",
-"مراجعة دوائر الأمان وشوك الأبواب الداخلي والخارجي",
-"التحقق من سلامة مكونات الكابينة الداخلية (إضاءة - مروحة - ماسك الديكور - أرضية)",
-"فحص لوحة المفاتيح والتأكد من مدى استجابتها للعمل",
-"اختبار مفتاح Alarm",
-"التحقق من تسارع الكابينة وتباطؤها ودقة ضبطها أثناء السير لأعلى وأسفل",
-"التأكد من عمل حركة الأبواب بسلاسة",
-"التأكد من وقوف الكابينة على كل مستوى بدقة ونظافة مجرى باب الكابينة"
+"التأكد من عمل التكييف",
+"فتح وغلق الفرامل",
+"منسوب الزيت",
+"فحص الباور",
+"تشغيل الكنترول",
+"تنظيف الكنترول",
+"تنظيف الكابينة",
+"فحص الويرات",
+"إضافة زيت",
+"تربيط السكة",
+"WD40",
+"دوائر الأمان",
+"مكونات الكابينة",
+"لوحة المفاتيح",
+"Alarm",
+"تسارع الكابينة",
+"الأبواب",
+"توقف الكابينة"
 ];
 
 const tbody = document.getElementById("items");
 
-list.forEach((item, i) => {
-  tbody.innerHTML += `
-  <tr>
-    <td>${i + 1}</td>
-    <td>${item}</td>
-    <td>
-      <input class="check" type="checkbox" name="item${i + 1}" value="تم">
-    </td>
-  </tr>`;
+list.forEach((item,i)=>{
+tbody.innerHTML += `
+<tr>
+<td>${i+1}</td>
+<td>${item}</td>
+<td><input type="checkbox" name="item${i+1}" value="تم"></td>
+</tr>`;
 });
 
-function setDateTime() {
-  const now = new Date();
-  document.getElementById("date").value = now.toLocaleDateString("en-CA");
-  document.getElementById("time").value = now.toLocaleTimeString("ar-EG", {
-    hour: "2-digit",
-    minute: "2-digit"
-  });
+function init(){
+let now=new Date();
+date.value=now.toLocaleDateString("en-CA");
+time.value=now.toLocaleTimeString();
+
+let last=localStorage.getItem("no")||2605000;
+reportNo.value=++last;
+localStorage.setItem("no",last);
+}
+init();
+
+form.addEventListener("submit", async(e)=>{
+e.preventDefault();
+
+let msg=document.getElementById("msg");
+msg.innerHTML="جاري الحفظ...";
+
+let data=Object.fromEntries(new FormData(form).entries());
+
+for(let i=1;i<=18;i++){
+if(!data["item"+i]) data["item"+i]="لم يتم";
 }
 
-function setReportNo() {
-  let lastNo = localStorage.getItem("lastReportNo");
-  if (!lastNo) lastNo = 2605000;
+let body=new URLSearchParams(data);
 
-  const newNo = Number(lastNo) + 1;
-  document.getElementById("reportNo").value = newNo;
-}
-
-setDateTime();
-setReportNo();
-
-document.getElementById("form").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const msg = document.getElementById("msg");
-  msg.style.color = "#0b3b82";
-  msg.innerHTML = "جاري الحفظ...";
-
-  const formData = new FormData(e.target);
-  const data = Object.fromEntries(formData.entries());
-
-  for (let i = 1; i <= 18; i++) {
-    if (!data["item" + i]) {
-      data["item" + i] = "لم يتم";
-    }
-  }
-
-  try {
-    await fetch(SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
-
-    localStorage.setItem("lastReportNo", document.getElementById("reportNo").value);
-
-    msg.style.color = "green";
-    msg.innerHTML = "✔ تم حفظ البيانات بنجاح";
-    disableForm();
-
-  } catch (err) {
-    msg.style.color = "red";
-    msg.innerHTML = "❌ حصل خطأ أثناء الحفظ";
-  }
+await fetch(SCRIPT_URL,{
+method:"POST",
+mode:"no-cors",
+body:body
 });
 
-function generatePDFWhatsApp() {
-  const report = document.getElementById("reportArea");
+msg.innerHTML="✔ تم الحفظ";
+});
 
-  const reportNo = document.getElementById("reportNo").value || "Report";
-  const customerName = document.querySelector("[name='customerName']").value || "";
-  const contractNo = document.querySelector("[name='contractNo']").value || "";
-  const technician = document.querySelector("[name='technician']").value || "";
+function pdf(){
+let el=document.getElementById("reportArea");
 
-  const buttons = document.querySelector(".buttons");
-  const msg = document.getElementById("msg");
-
-  buttons.style.display = "none";
-  msg.style.display = "none";
-
-  const options = {
-    margin: [4, 4, 4, 4],
-    filename: `Maintenance-Report-${reportNo}.pdf`,
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: {
-      scale: 2,
-      useCORS: true,
-      scrollY: 0
-    },
-    jsPDF: {
-      unit: "mm",
-      format: "a4",
-      orientation: "portrait"
-    },
-    pagebreak: { mode: ["avoid-all"] }
-  };
-
-  html2pdf().set(options).from(report).save().then(() => {
-    buttons.style.display = "grid";
-    msg.style.display = "block";
-
-    const text =
-      `تقرير صيانة المصعد%0A` +
-      `رقم التقرير: ${reportNo}%0A` +
-      `رقم العقد: ${contractNo}%0A` +
-      `اسم العميل: ${customerName}%0A` +
-      `الفني: ${technician}%0A%0A` +
-      `تم تجهيز تقرير الصيانة PDF، يرجى إرفاق الملف وإرساله.`;
-
-    window.open(`https://wa.me/?text=${text}`, "_blank");
-  });
+html2pdf().from(el).save().then(()=>{
+window.open("https://wa.me/?text=تم إنشاء تقرير الصيانة PDF","_blank");
+});
 }
 
-function disableForm() {
-  const fields = document.querySelectorAll("input, select, textarea");
-  fields.forEach(field => {
-    field.disabled = true;
-  });
-}
-
-function enableEdit() {
-  const fields = document.querySelectorAll("input, select, textarea");
-  fields.forEach(field => {
-    field.disabled = false;
-  });
-
-  document.getElementById("date").readOnly = true;
-  document.getElementById("time").readOnly = true;
-  document.getElementById("reportNo").readOnly = true;
-
-  document.getElementById("msg").style.color = "#f59e0b";
-  document.getElementById("msg").innerHTML = "يمكنك التعديل الآن";
-}
-
-function closePage() {
-  window.close();
-  document.body.innerHTML =
-    "<h2 style='text-align:center;margin-top:80px;color:#0b3b82'>تم إغلاق التقرير</h2>";
+function enable(){
+document.querySelectorAll("input,select,textarea").forEach(e=>e.disabled=false);
 }
 </script>
 

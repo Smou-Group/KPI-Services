@@ -3,202 +3,194 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>تقرير صيانة المصعد - SMOU Group</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
-@page { size: A4; margin: 5mm; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
-  font-family: Tahoma, Arial;
-  background: linear-gradient(135deg, #061b3a, #0b3b82, #04152e);
+  font-family: Tahoma, Arial, sans-serif;
+  background: linear-gradient(160deg, #03152f, #082d63);
   min-height: 100vh;
-  color: #111;
+  padding: 10px;
 }
 
 .container {
-  max-width: 1100px;
-  margin: 15px auto;
-  background: #ffffff;
-  padding: 14px;
-  border-radius: 18px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.35);
-  border: 1px solid rgba(255,255,255,0.25);
+  max-width: 850px;
+  margin: auto;
+  background: #fff;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.35);
 }
 
 .header {
   background: linear-gradient(135deg, #061b3a, #0b3b82);
   color: white;
-  border-radius: 16px;
-  padding: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
+  padding: 18px;
+  text-align: center;
 }
 
-.logo-box {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.logo-box img {
-  width: 70px;
-  height: 70px;
+.logo {
+  width: 80px;
+  height: 80px;
   object-fit: contain;
   background: white;
-  border-radius: 12px;
-  padding: 6px;
+  border-radius: 16px;
+  padding: 8px;
+  margin-bottom: 8px;
 }
 
-.company-name {
+.header h2 {
+  margin: 0;
   font-size: 22px;
-  font-weight: bold;
 }
 
-.company-sub {
+.header p {
+  margin: 5px 0 0;
   font-size: 13px;
   color: #dbeafe;
-  margin-top: 4px;
 }
 
-.report-title {
-  text-align: left;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-h1 {
+.title {
   text-align: center;
-  color: #0b3b82;
-  font-size: 22px;
-  margin: 10px 0;
+  background: #f1f5f9;
+  color: #061b3a;
+  font-size: 21px;
+  font-weight: bold;
+  padding: 14px;
+}
+
+form {
+  padding: 14px;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  color: #334155;
+  margin-bottom: 5px;
 }
 
 input, select, textarea {
   width: 100%;
-  padding: 8px;
-  font-size: 12px;
+  padding: 13px;
+  font-size: 15px;
   border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  box-sizing: border-box;
+  border-radius: 14px;
   background: #f8fafc;
 }
 
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: #0b3b82;
-  background: #ffffff;
+  background: #fff;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-  font-size: 11px;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-th, td {
-  border: 1px solid #dbe3ef;
-  padding: 5px;
+.section-title {
+  margin: 16px 0 10px;
+  padding: 11px;
+  background: #061b3a;
+  color: white;
+  border-radius: 12px;
+  font-weight: bold;
   text-align: center;
 }
 
-th {
-  background: #061b3a;
-  color: white;
-}
-
-td:nth-child(2) {
-  text-align: right;
+.check-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #dbe3ef;
+  border-radius: 13px;
+  padding: 11px;
+  margin-bottom: 8px;
+  font-size: 13px;
   font-weight: bold;
 }
 
-tbody tr:nth-child(even) {
-  background: #f1f5f9;
+.check-item input {
+  width: 24px;
+  height: 24px;
 }
 
 textarea {
-  height: 55px;
-  margin-top: 10px;
+  height: 80px;
+  resize: none;
 }
 
 .buttons {
   display: grid;
-  grid-template-columns: repeat(4,1fr);
-  gap: 8px;
-  margin-top: 12px;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 15px;
 }
 
 button {
-  padding: 11px;
   border: none;
   color: white;
+  padding: 15px;
+  border-radius: 14px;
+  font-size: 15px;
   font-weight: bold;
   cursor: pointer;
-  border-radius: 10px;
-  font-size: 13px;
 }
 
 .save { background: #0b3b82; }
-.print { background: #15803d; }
-.edit { background: #f59e0b; }
-.close { background: #dc2626; }
+.pdf { background: #15803d; }
+.clear { background: #dc2626; }
 
 #msg {
-  margin-top: 10px;
   text-align: center;
+  margin-top: 12px;
   font-weight: bold;
   color: #0b3b82;
 }
 
 .footer {
-  margin-top: 10px;
   text-align: center;
+  padding: 12px;
+  color: #64748b;
   font-size: 11px;
-  color: #475569;
 }
 
 @media print {
   body {
     background: white;
+    padding: 0;
+  }
+
+  .buttons, #msg {
+    display: none;
   }
 
   .container {
     box-shadow: none;
-    margin: 0;
     border-radius: 0;
-  }
-
-  .buttons {
-    display:none;
   }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 700px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .header {
-    flex-direction: column;
-    gap: 10px;
-    text-align: center;
-  }
-
-  .report-title {
-    text-align: center;
+  .buttons {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 </style>
@@ -208,155 +200,187 @@ button {
 
 <div class="container" id="reportArea">
 
-<div class="header">
-  <div class="logo-box">
-    <img src="logo.png" alt="SMOU Group Logo">
-    <div>
-      <div class="company-name">مجموعة سمو</div>
-      <div class="company-sub">SMOU Group</div>
+  <div class="header">
+    <img src="logo.png" class="logo" alt="SMOU Group Logo">
+    <h2>مجموعة سمو</h2>
+    <p>SMOU Group - Elevators & Air Conditioning</p>
+  </div>
+
+  <div class="title">تقرير صيانة المصعد</div>
+
+  <form id="form">
+
+    <div class="grid">
+
+      <div class="field">
+        <label>التاريخ</label>
+        <input name="date" id="date" readonly>
+      </div>
+
+      <div class="field">
+        <label>الوقت</label>
+        <input name="time" id="time" readonly>
+      </div>
+
+      <div class="field">
+        <label>رقم التقرير</label>
+        <input name="reportNo" id="reportNo" readonly>
+      </div>
+
+      <div class="field">
+        <label>رقم العقد</label>
+        <input name="contractNo" placeholder="رقم العقد">
+      </div>
+
+      <div class="field">
+        <label>اسم العميل</label>
+        <input name="customerName" placeholder="اسم العميل">
+      </div>
+
+      <div class="field">
+        <label>الموقع</label>
+        <input name="location" placeholder="الموقع">
+      </div>
+
+      <div class="field">
+        <label>الفني</label>
+        <select name="technician">
+          <option value="">اختر الفني</option>
+          <option>احمد</option>
+          <option>سيد</option>
+          <option>محمد</option>
+          <option>علي</option>
+          <option>خالد</option>
+        </select>
+      </div>
+
     </div>
+
+    <div class="section-title">بنود الصيانة</div>
+
+    <div id="items"></div>
+
+    <div class="section-title">ملاحظات</div>
+    <textarea name="notes" placeholder="ملاحظات"></textarea>
+
+    <div class="buttons">
+      <button type="submit" class="save">حفظ في Google Sheet</button>
+      <button type="button" class="pdf" onclick="sharePDF()">PDF + واتساب</button>
+      <button type="button" class="clear" onclick="location.reload()">تقرير جديد</button>
+    </div>
+
+    <div id="msg"></div>
+
+  </form>
+
+  <div class="footer">
+    SMOU Group - Maintenance Report
   </div>
 
-  <div class="report-title">
-    تقرير صيانة المصعد
-  </div>
-</div>
-
-<form id="form">
-
-<div class="grid">
-<input name="date" id="date" readonly>
-<input name="time" id="time" readonly>
-<input name="reportNo" id="reportNo" readonly>
-
-<input name="contractNo" placeholder="رقم العقد">
-<input name="customerName" placeholder="اسم العميل">
-<input name="location" placeholder="الموقع">
-
-<select name="technician">
-<option>اختر الفني</option>
-<option>احمد</option>
-<option>سيد</option>
-<option>محمد</option>
-<option>علي</option>
-<option>خالد</option>
-</select>
-</div>
-
-<table>
-<thead>
-<tr>
-<th>م</th>
-<th>البند</th>
-<th>✔</th>
-</tr>
-</thead>
-<tbody id="items"></tbody>
-</table>
-
-<textarea name="notes" placeholder="ملاحظات"></textarea>
-
-<div class="buttons">
-<button class="save" type="submit">حفظ</button>
-<button class="print" type="button" onclick="pdf()">PDF + واتساب</button>
-<button class="edit" type="button" onclick="enable()">تعديل</button>
-<button class="close" type="button" onclick="window.close()">إغلاق</button>
-</div>
-
-<div id="msg"></div>
-
-<div class="footer">
-SMOU Group - Elevators & Air Conditioning
-</div>
-
-</form>
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/a/macros/smou.ae/s/AKfycbzLB-yQsZW4ZQPKvrKcZ4DNPtJiGt9yoR44u7uPxoz1x1hXyF8O4N_RUKuy-3RR4LuaHw/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOwiFy1_yHWGq_id30gl0YVscY8enyVZfAdtLYgDiKn5ek1R-cEMGoI_QK3hephXHLwg/exec";
 
-const list = [
-"التأكد من عمل التكييف",
-"فتح وغلق الفرامل",
-"منسوب الزيت",
-"فحص الباور",
-"تشغيل الكنترول",
-"تنظيف الكنترول",
-"تنظيف الكابينة",
-"فحص الويرات",
-"إضافة زيت",
-"تربيط السكة",
-"WD40",
-"دوائر الأمان",
-"مكونات الكابينة",
-"لوحة المفاتيح",
-"Alarm",
-"تسارع الكابينة",
-"الأبواب",
-"توقف الكابينة"
+const items = [
+"التأكد من عمل التكييف وتنظيف الماكينة من الغبار والأتربة",
+"التأكد من فتح وغلق الفرامل",
+"التحقق من منسوب زيت الماكينة",
+"التحقق من الباور والانتباه جيدًا لعلامات التآكل",
+"التحقق من جودة تشغيل الكنترول",
+"تنظيف الكنترول بواسطة البلور",
+"تنظيف أعلى الكابينة من الغبار والأتربة",
+"التأكد من عدم ارتخاء الويرات وجودة التثبيت",
+"إضافة زيت إلى الزوايا",
+"تربيط سكة النقل",
+"استخدام WD40 للأجزاء المتحركة في الباب",
+"مراجعة دوائر الأمان وشوك الأبواب الداخلي والخارجي",
+"التحقق من سلامة مكونات الكابينة الداخلية (إضاءة - مروحة - ماسك الديكور - أرضية)",
+"فحص لوحة المفاتيح والتأكد من مدى استجابتها للعمل",
+"اختبار مفتاح Alarm",
+"التحقق من تسارع الكابينة وتباطؤها ودقة ضبطها أثناء السير لأعلى وأسفل",
+"التأكد من عمل حركة الأبواب بسلاسة",
+"التأكد من وقوف الكابينة على كل مستوى بدقة ونظافة مجرى باب الكابينة"
 ];
 
-const tbody = document.getElementById("items");
+const itemsBox = document.getElementById("items");
 
-list.forEach((item,i)=>{
-tbody.innerHTML += `
-<tr>
-<td>${i+1}</td>
-<td>${item}</td>
-<td><input type="checkbox" name="item${i+1}" value="تم"></td>
-</tr>`;
+items.forEach((text, index) => {
+  itemsBox.innerHTML += `
+    <label class="check-item">
+      <span>${index + 1}. ${text}</span>
+      <input type="checkbox" name="item${index + 1}" value="تم">
+    </label>
+  `;
 });
 
-function init(){
-let now = new Date();
-date.value = now.toLocaleDateString("en-CA");
-time.value = now.toLocaleTimeString();
+function init() {
+  const now = new Date();
 
-let last = localStorage.getItem("no") || 2605000;
-reportNo.value = ++last;
-localStorage.setItem("no", last);
+  document.getElementById("date").value = now.toLocaleDateString("en-CA");
+  document.getElementById("time").value = now.toLocaleTimeString("ar-AE");
+
+  let lastNo = localStorage.getItem("SMOU_REPORT_NO") || 2605000;
+  lastNo++;
+  document.getElementById("reportNo").value = lastNo;
+  localStorage.setItem("SMOU_REPORT_NO", lastNo);
 }
+
 init();
 
-form.addEventListener("submit", async(e)=>{
-e.preventDefault();
+document.getElementById("form").addEventListener("submit", function(e) {
+  e.preventDefault();
 
-let msg = document.getElementById("msg");
-msg.innerHTML = "جاري الحفظ...";
+  const msg = document.getElementById("msg");
+  msg.innerHTML = "جاري الحفظ...";
 
-let data = Object.fromEntries(new FormData(form).entries());
+  const formData = new FormData(this);
 
-for(let i=1;i<=18;i++){
-if(!data["item"+i]) data["item"+i] = "لم يتم";
-}
+  for (let i = 1; i <= 18; i++) {
+    if (!formData.has("item" + i)) {
+      formData.append("item" + i, "لم يتم");
+    }
+  }
 
-let body = new URLSearchParams(data);
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: formData
+  });
 
-await fetch(SCRIPT_URL,{
-method:"POST",
-mode:"no-cors",
-body:body
+  msg.innerHTML = "✔ تم إرسال البيانات إلى Google Sheet";
 });
 
-msg.innerHTML = "✔ تم الحفظ";
-});
+async function sharePDF() {
+  const element = document.getElementById("reportArea");
+  const reportNo = document.getElementById("reportNo").value;
+  const fileName = "SMOU-Maintenance-Report-" + reportNo + ".pdf";
 
-function pdf(){
-let el = document.getElementById("reportArea");
+  const opt = {
+    margin: 5,
+    filename: fileName,
+    image: { type: "jpeg", quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+  };
 
-html2pdf().set({
-  margin: 5,
-  filename: 'SMOU-Maintenance-Report.pdf',
-  image: { type: 'jpeg', quality: 0.98 },
-  html2canvas: { scale: 2, useCORS: true },
-  jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-}).from(el).save().then(()=>{
-  window.open("https://wa.me/?text=تم إنشاء تقرير الصيانة PDF - SMOU Group","_blank");
-});
-}
+  const worker = html2pdf().set(opt).from(element);
+  const pdfBlob = await worker.outputPdf("blob");
 
-function enable(){
-document.querySelectorAll("input,select,textarea").forEach(e=>e.disabled=false);
+  const file = new File([pdfBlob], fileName, {
+    type: "application/pdf"
+  });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    await navigator.share({
+      title: "تقرير صيانة المصعد",
+      text: "مرفق تقرير صيانة المصعد - SMOU Group",
+      files: [file]
+    });
+  } else {
+    html2pdf().set(opt).from(element).save();
+    window.open("https://wa.me/?text=تم إنشاء تقرير صيانة المصعد - SMOU Group", "_blank");
+  }
 }
 </script>
 

@@ -3,317 +3,318 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>تقرير صيانة المصعد - SMOU Group</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Tahoma,Arial,sans-serif;
+  background:linear-gradient(160deg,#03152f,#082d63);
+  min-height:100vh;
+  padding:10px;
 }
 
-body {
-  margin: 0;
-  font-family: Tahoma, Arial, sans-serif;
-  background: linear-gradient(160deg, #03152f, #082d63);
-  min-height: 100vh;
-  padding: 10px;
+.container{
+  max-width:850px;
+  margin:auto;
+  background:#fff;
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 20px 45px rgba(0,0,0,.35);
 }
 
-.container {
-  max-width: 850px;
-  margin: auto;
-  background: #fff;
-  border-radius: 22px;
-  overflow: hidden;
-  box-shadow: 0 20px 45px rgba(0,0,0,0.35);
+.header{
+  background:linear-gradient(135deg,#061b3a,#0b3b82);
+  color:white;
+  padding:18px;
+  text-align:center;
 }
 
-.header {
-  background: linear-gradient(135deg, #061b3a, #0b3b82);
-  color: white;
-  padding: 18px;
-  text-align: center;
+.logo{
+  width:80px;
+  height:80px;
+  object-fit:contain;
+  background:white;
+  border-radius:16px;
+  padding:8px;
+  margin-bottom:8px;
 }
 
-.logo {
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
-  background: white;
-  border-radius: 16px;
-  padding: 8px;
-  margin-bottom: 8px;
+.header h2{margin:0;font-size:22px}
+.header p{margin:5px 0 0;font-size:13px;color:#dbeafe}
+
+.title{
+  text-align:center;
+  background:#f1f5f9;
+  color:#061b3a;
+  font-size:21px;
+  font-weight:bold;
+  padding:14px;
 }
 
-.header h2 {
-  margin: 0;
-  font-size: 22px;
+form{padding:14px}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
 }
 
-.header p {
-  margin: 5px 0 0;
-  font-size: 13px;
-  color: #dbeafe;
+.field label{
+  display:block;
+  font-size:13px;
+  font-weight:bold;
+  color:#334155;
+  margin-bottom:5px;
 }
 
-.title {
-  text-align: center;
-  background: #f1f5f9;
-  color: #061b3a;
-  font-size: 21px;
-  font-weight: bold;
-  padding: 14px;
+input,select,textarea{
+  width:100%;
+  padding:13px;
+  font-size:15px;
+  border:1px solid #cbd5e1;
+  border-radius:14px;
+  background:#f8fafc;
 }
 
-form {
-  padding: 14px;
+.section-title{
+  margin:16px 0 10px;
+  padding:11px;
+  background:#061b3a;
+  color:white;
+  border-radius:12px;
+  font-weight:bold;
+  text-align:center;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
+.check-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#f8fafc;
+  border:1px solid #dbe3ef;
+  border-radius:13px;
+  padding:11px;
+  margin-bottom:8px;
+  font-size:13px;
+  font-weight:bold;
 }
 
-.field label {
-  display: block;
-  font-size: 13px;
-  font-weight: bold;
-  color: #334155;
-  margin-bottom: 5px;
+.check-item input{
+  width:24px;
+  height:24px;
 }
 
-input, select, textarea {
-  width: 100%;
-  padding: 13px;
-  font-size: 15px;
-  border: 1px solid #cbd5e1;
-  border-radius: 14px;
-  background: #f8fafc;
+textarea{
+  height:80px;
+  resize:none;
 }
 
-.section-title {
-  margin: 16px 0 10px;
-  padding: 11px;
-  background: #061b3a;
-  color: white;
-  border-radius: 12px;
-  font-weight: bold;
-  text-align: center;
+.buttons{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+  margin-top:15px;
 }
 
-.check-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #f8fafc;
-  border: 1px solid #dbe3ef;
-  border-radius: 13px;
-  padding: 11px;
-  margin-bottom: 8px;
-  font-size: 13px;
-  font-weight: bold;
+button{
+  border:none;
+  color:white;
+  padding:15px;
+  border-radius:14px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
 }
 
-.check-item input {
-  width: 24px;
-  height: 24px;
+.savepdf{background:#15803d}
+.downloadpdf{background:#0b3b82}
+.close{background:#dc2626}
+
+#msg{
+  text-align:center;
+  margin-top:12px;
+  font-weight:bold;
+  color:#0b3b82;
 }
 
-textarea {
-  height: 80px;
-  resize: none;
+.footer{
+  text-align:center;
+  padding:12px;
+  color:#64748b;
+  font-size:11px;
 }
 
-.buttons {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-  margin-top: 15px;
+/* PDF */
+.pdf-temp{
+  position:fixed;
+  top:0;
+  right:0;
+  width:210mm;
+  background:white;
+  z-index:999999;
+  opacity:1;
 }
 
-button {
-  border: none;
-  color: white;
-  padding: 15px;
-  border-radius: 14px;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
+.pdf-page{
+  width:210mm;
+  height:297mm;
+  padding:5mm;
+  background:white;
+  font-family:Tahoma,Arial,sans-serif;
+  direction:rtl;
+  color:#111827;
 }
 
-.savepdf { background: #15803d; }
-.close { background: #dc2626; }
-
-#msg {
-  text-align: center;
-  margin-top: 12px;
-  font-weight: bold;
-  color: #0b3b82;
+.pdf-header{
+  background:linear-gradient(135deg,#061b3a,#0b3b82);
+  color:white;
+  border-radius:7px;
+  padding:6px 10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-.footer {
-  text-align: center;
-  padding: 12px;
-  color: #64748b;
-  font-size: 11px;
+.pdf-brand{
+  display:flex;
+  align-items:center;
+  gap:8px;
 }
 
-/* PDF DESIGN */
-.pdf-temp {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 210mm;
-  background: white;
-  z-index: 999999;
-  opacity: 1;
+.pdf-logo{
+  width:36px;
+  height:36px;
+  background:white;
+  border-radius:7px;
+  padding:3px;
+  object-fit:contain;
 }
 
-.pdf-page {
-  width: 210mm;
-  height: 297mm;
-  padding: 7mm;
-  background: white;
-  font-family: Tahoma, Arial, sans-serif;
-  direction: rtl;
-  color: #111827;
+.pdf-company{
+  font-size:14px;
+  font-weight:bold;
 }
 
-.pdf-header {
-  background: linear-gradient(135deg, #061b3a, #0b3b82);
-  color: white;
-  border-radius: 8px;
-  padding: 8px 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.pdf-sub{
+  font-size:8px;
+  color:#dbeafe;
 }
 
-.pdf-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.pdf-title{
+  font-size:16px;
+  font-weight:bold;
 }
 
-.pdf-logo {
-  width: 42px;
-  height: 42px;
-  background: white;
-  border-radius: 8px;
-  padding: 4px;
-  object-fit: contain;
+.pdf-info{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:4px;
+  margin-top:6px;
 }
 
-.pdf-company {
-  font-size: 15px;
-  font-weight: bold;
+.pdf-box{
+  border:1px solid #cbd5e1;
+  border-radius:5px;
+  padding:4px;
+  min-height:24px;
 }
 
-.pdf-sub {
-  font-size: 9px;
-  color: #dbeafe;
+.pdf-label{
+  font-size:7px;
+  color:#475569;
 }
 
-.pdf-title {
-  font-size: 17px;
-  font-weight: bold;
+.pdf-value{
+  font-size:9px;
+  font-weight:bold;
+  margin-top:1px;
 }
 
-.pdf-info {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 5px;
-  margin-top: 8px;
+.pdf-section{
+  margin-top:6px;
+  background:#061b3a;
+  color:white;
+  padding:4px 8px;
+  border-radius:5px;
+  font-size:10px;
+  font-weight:bold;
 }
 
-.pdf-box {
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  padding: 5px;
+.pdf-items-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4px;
+  margin-top:5px;
 }
 
-.pdf-label {
-  font-size: 8px;
-  color: #475569;
+.pdf-item{
+  border:1px solid #cbd5e1;
+  border-radius:5px;
+  padding:3px 5px;
+  display:grid;
+  grid-template-columns:7mm 1fr 15mm;
+  align-items:center;
+  gap:3px;
+  min-height:17px;
 }
 
-.pdf-value {
-  font-size: 10px;
-  font-weight: bold;
-  margin-top: 2px;
+.pdf-no{
+  text-align:center;
+  font-size:7.5px;
+  font-weight:bold;
+  color:#0b3b82;
 }
 
-.pdf-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 8px;
-  font-size: 8.2px;
+.pdf-text{
+  font-size:7.3px;
+  line-height:1.25;
 }
 
-.pdf-table th {
-  background: #061b3a;
-  color: white;
-  border: 1px solid #061b3a;
-  padding: 4px;
+.pdf-status{
+  font-size:7.5px;
+  text-align:center;
+  font-weight:bold;
+  color:#15803d;
 }
 
-.pdf-table td {
-  border: 1px solid #cbd5e1;
-  padding: 3px 4px;
+.pdf-notes{
+  margin-top:6px;
+  border:1px solid #cbd5e1;
+  border-radius:5px;
+  padding:5px;
+  min-height:22px;
+  font-size:8px;
 }
 
-.pdf-table td:nth-child(1) {
-  width: 8mm;
-  text-align: center;
+.pdf-sign{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:9px;
 }
 
-.pdf-table td:nth-child(3) {
-  width: 18mm;
-  text-align: center;
-  font-weight: bold;
+.pdf-sign div{
+  border-top:1px solid #334155;
+  padding-top:4px;
+  font-size:8px;
+  text-align:center;
 }
 
-.pdf-notes {
-  margin-top: 7px;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  padding: 6px;
-  min-height: 28px;
-  font-size: 9px;
+.pdf-footer{
+  margin-top:5px;
+  text-align:center;
+  font-size:7px;
+  color:#64748b;
 }
 
-.pdf-sign {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 10px;
-}
-
-.pdf-sign div {
-  border-top: 1px solid #334155;
-  padding-top: 5px;
-  font-size: 9px;
-  text-align: center;
-}
-
-.pdf-footer {
-  margin-top: 6px;
-  text-align: center;
-  font-size: 8px;
-  color: #64748b;
-}
-
-@media (min-width: 700px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .buttons {
-    grid-template-columns: repeat(2, 1fr);
-  }
+@media(min-width:700px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .buttons{grid-template-columns:repeat(3,1fr)}
 }
 </style>
 </head>
@@ -333,7 +334,6 @@ button {
   <form id="form">
 
     <div class="grid">
-
       <div class="field">
         <label>التاريخ</label>
         <input name="date" id="date" readonly>
@@ -375,7 +375,6 @@ button {
           <option>خالد</option>
         </select>
       </div>
-
     </div>
 
     <div class="section-title">بنود الصيانة</div>
@@ -386,6 +385,7 @@ button {
 
     <div class="buttons">
       <button type="button" class="savepdf" onclick="saveAndSharePDF()">حفظ في Google Sheet + إرسال PDF</button>
+      <button type="button" class="downloadpdf" onclick="downloadPDFOnly()">حفظ PDF فقط</button>
       <button type="button" class="close" onclick="window.close()">إغلاق</button>
     </div>
 
@@ -393,16 +393,14 @@ button {
 
   </form>
 
-  <div class="footer">
-    SMOU Group - Maintenance Report
-  </div>
+  <div class="footer">SMOU Group - Maintenance Report</div>
 
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOwiFy1_yHWGq_id30gl0YVscY8enyVZfAdtLYgDiKn5ek1R-cEMGoI_QK3hephXHLwg/exec";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyOwiFy1_yHWGq_id30gl0YVscY8enyVZfAdtLYgDiKn5ek1R-cEMGoI_QK3hephXHLwg/exec";
 
-const items = [
+const items=[
 "التأكد من عمل التكييف وتنظيف الماكينة من الغبار والأتربة",
 "التأكد من فتح وغلق الفرامل",
 "التحقق من منسوب زيت الماكينة",
@@ -423,87 +421,95 @@ const items = [
 "التأكد من وقوف الكابينة على كل مستوى بدقة ونظافة مجرى باب الكابينة"
 ];
 
-const itemsBox = document.getElementById("items");
+const itemsBox=document.getElementById("items");
 
-items.forEach((text, index) => {
-  itemsBox.innerHTML += `
+items.forEach((text,index)=>{
+  itemsBox.innerHTML+=`
     <label class="check-item">
-      <span>${index + 1}. ${text}</span>
-      <input type="checkbox" name="item${index + 1}" value="تم">
+      <span>${index+1}. ${text}</span>
+      <input type="checkbox" name="item${index+1}" value="تم">
     </label>
   `;
 });
 
-function init() {
-  const now = new Date();
+function init(){
+  const now=new Date();
+  document.getElementById("date").value=now.toLocaleDateString("en-CA");
+  document.getElementById("time").value=now.toLocaleTimeString("ar-AE");
 
-  document.getElementById("date").value = now.toLocaleDateString("en-CA");
-  document.getElementById("time").value = now.toLocaleTimeString("ar-AE");
-
-  let lastNo = localStorage.getItem("SMOU_REPORT_NO") || 2605000;
+  let lastNo=localStorage.getItem("SMOU_REPORT_NO")||2605000;
   lastNo++;
-  document.getElementById("reportNo").value = lastNo;
-  localStorage.setItem("SMOU_REPORT_NO", lastNo);
+  document.getElementById("reportNo").value=lastNo;
+  localStorage.setItem("SMOU_REPORT_NO",lastNo);
 }
-
 init();
 
-function collectData() {
-  const form = document.getElementById("form");
-  const formData = new FormData(form);
+function collectData(){
+  const form=document.getElementById("form");
+  const formData=new FormData(form);
 
-  for (let i = 1; i <= 18; i++) {
-    if (!formData.has("item" + i)) {
-      formData.append("item" + i, "لم يتم");
+  for(let i=1;i<=18;i++){
+    if(!formData.has("item"+i)){
+      formData.append("item"+i,"لم يتم");
     }
   }
 
   return formData;
 }
 
-async function saveToSheet(formData) {
-  await fetch(SCRIPT_URL, {
-    method: "POST",
-    mode: "no-cors",
-    body: formData
+async function saveToSheet(formData){
+  await fetch(SCRIPT_URL,{
+    method:"POST",
+    mode:"no-cors",
+    body:formData
   });
 }
 
-async function saveAndSharePDF() {
-  const msg = document.getElementById("msg");
-  msg.innerHTML = "جاري الحفظ وإنشاء PDF...";
+async function saveAndSharePDF(){
+  const msg=document.getElementById("msg");
+  msg.innerHTML="جاري الحفظ وإنشاء PDF...";
 
-  const formData = collectData();
-
+  const formData=collectData();
   await saveToSheet(formData);
 
-  const data = Object.fromEntries(formData.entries());
-  await createAndSharePDF(data);
+  const data=Object.fromEntries(formData.entries());
+  await createPDF(data,"share");
 
-  msg.innerHTML = "✔ تم الحفظ وفتح مشاركة PDF";
+  msg.innerHTML="✔ تم الحفظ وفتح مشاركة PDF";
 }
 
-async function createAndSharePDF(data) {
-  let rows = "";
+async function downloadPDFOnly(){
+  const msg=document.getElementById("msg");
+  msg.innerHTML="جاري إنشاء PDF...";
 
-  items.forEach((item, index) => {
-    const status = data["item" + (index + 1)] === "تم" ? "✓ تم" : "لم يتم";
+  const formData=collectData();
+  const data=Object.fromEntries(formData.entries());
 
-    rows += `
-      <tr>
-        <td>${index + 1}</td>
-        <td>${item}</td>
-        <td>${status}</td>
-      </tr>
+  await createPDF(data,"download");
+
+  msg.innerHTML="✔ تم حفظ PDF";
+}
+
+async function createPDF(data,mode){
+  let itemCards="";
+
+  items.forEach((item,index)=>{
+    const status=data["item"+(index+1)]==="تم" ? "✓ تم" : "لم يتم";
+    itemCards+=`
+      <div class="pdf-item">
+        <div class="pdf-no">${index+1}</div>
+        <div class="pdf-text">${item}</div>
+        <div class="pdf-status">${status}</div>
+      </div>
     `;
   });
 
-  const fileName = "SMOU-Maintenance-Report-" + (data.reportNo || "Report") + ".pdf";
+  const fileName="SMOU-Maintenance-Report-"+(data.reportNo||"Report")+".pdf";
 
-  const wrapper = document.createElement("div");
-  wrapper.className = "pdf-temp";
+  const wrapper=document.createElement("div");
+  wrapper.className="pdf-temp";
 
-  wrapper.innerHTML = `
+  wrapper.innerHTML=`
     <div class="pdf-page" id="pdfPage">
 
       <div class="pdf-header">
@@ -518,63 +524,24 @@ async function createAndSharePDF(data) {
       </div>
 
       <div class="pdf-info">
-        <div class="pdf-box">
-          <div class="pdf-label">التاريخ</div>
-          <div class="pdf-value">${data.date || ""}</div>
-        </div>
-
-        <div class="pdf-box">
-          <div class="pdf-label">الوقت</div>
-          <div class="pdf-value">${data.time || ""}</div>
-        </div>
-
-        <div class="pdf-box">
-          <div class="pdf-label">رقم التقرير</div>
-          <div class="pdf-value">${data.reportNo || ""}</div>
-        </div>
-
-        <div class="pdf-box">
-          <div class="pdf-label">رقم العقد</div>
-          <div class="pdf-value">${data.contractNo || ""}</div>
-        </div>
-
-        <div class="pdf-box">
-          <div class="pdf-label">اسم العميل</div>
-          <div class="pdf-value">${data.customerName || ""}</div>
-        </div>
-
-        <div class="pdf-box">
-          <div class="pdf-label">الموقع</div>
-          <div class="pdf-value">${data.location || ""}</div>
-        </div>
-
-        <div class="pdf-box">
-          <div class="pdf-label">الفني</div>
-          <div class="pdf-value">${data.technician || ""}</div>
-        </div>
-
-        <div class="pdf-box">
-          <div class="pdf-label">نوع التقرير</div>
-          <div class="pdf-value">صيانة دورية</div>
-        </div>
+        <div class="pdf-box"><div class="pdf-label">التاريخ</div><div class="pdf-value">${data.date||""}</div></div>
+        <div class="pdf-box"><div class="pdf-label">الوقت</div><div class="pdf-value">${data.time||""}</div></div>
+        <div class="pdf-box"><div class="pdf-label">رقم التقرير</div><div class="pdf-value">${data.reportNo||""}</div></div>
+        <div class="pdf-box"><div class="pdf-label">رقم العقد</div><div class="pdf-value">${data.contractNo||""}</div></div>
+        <div class="pdf-box"><div class="pdf-label">اسم العميل</div><div class="pdf-value">${data.customerName||""}</div></div>
+        <div class="pdf-box"><div class="pdf-label">الموقع</div><div class="pdf-value">${data.location||""}</div></div>
+        <div class="pdf-box"><div class="pdf-label">الفني</div><div class="pdf-value">${data.technician||""}</div></div>
+        <div class="pdf-box"><div class="pdf-label">نوع التقرير</div><div class="pdf-value">صيانة دورية</div></div>
       </div>
 
-      <table class="pdf-table">
-        <thead>
-          <tr>
-            <th>م</th>
-            <th>بند الفحص والصيانة</th>
-            <th>الحالة</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows}
-        </tbody>
-      </table>
+      <div class="pdf-section">بنود الفحص والصيانة</div>
+      <div class="pdf-items-grid">
+        ${itemCards}
+      </div>
 
       <div class="pdf-notes">
         <strong>ملاحظات:</strong><br>
-        ${data.notes || "لا توجد ملاحظات"}
+        ${data.notes||"لا توجد ملاحظات"}
       </div>
 
       <div class="pdf-sign">
@@ -591,52 +558,48 @@ async function createAndSharePDF(data) {
 
   document.body.appendChild(wrapper);
 
-  await new Promise(resolve => setTimeout(resolve, 700));
+  await new Promise(resolve=>setTimeout(resolve,700));
 
-  const element = document.getElementById("pdfPage");
+  const element=document.getElementById("pdfPage");
 
-  const opt = {
-    margin: 0,
-    filename: fileName,
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: {
-      scale: 2,
-      useCORS: true,
-      scrollX: 0,
-      scrollY: 0,
-      windowWidth: 794,
-      windowHeight: 1123
+  const opt={
+    margin:0,
+    filename:fileName,
+    image:{type:"jpeg",quality:0.98},
+    html2canvas:{
+      scale:2,
+      useCORS:true,
+      scrollX:0,
+      scrollY:0,
+      windowWidth:794,
+      windowHeight:1123
     },
-    jsPDF: {
-      unit: "mm",
-      format: "a4",
-      orientation: "portrait"
+    jsPDF:{
+      unit:"mm",
+      format:"a4",
+      orientation:"portrait"
     },
-    pagebreak: {
-      mode: ["avoid-all"]
-    }
+    pagebreak:{mode:["avoid-all"]}
   };
 
-  const worker = html2pdf().set(opt).from(element);
-  const pdfBlob = await worker.outputPdf("blob");
+  const worker=html2pdf().set(opt).from(element);
+  const pdfBlob=await worker.outputPdf("blob");
 
   document.body.removeChild(wrapper);
 
-  const file = new File([pdfBlob], fileName, {
-    type: "application/pdf"
-  });
+  const file=new File([pdfBlob],fileName,{type:"application/pdf"});
 
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+  if(mode==="share" && navigator.canShare && navigator.canShare({files:[file]})){
     await navigator.share({
-      title: "تقرير صيانة المصعد",
-      text: "مرفق تقرير صيانة المصعد - SMOU Group",
-      files: [file]
+      title:"تقرير صيانة المصعد",
+      text:"مرفق تقرير صيانة المصعد - SMOU Group",
+      files:[file]
     });
-  } else {
-    const url = URL.createObjectURL(pdfBlob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = fileName;
+  }else{
+    const url=URL.createObjectURL(pdfBlob);
+    const a=document.createElement("a");
+    a.href=url;
+    a.download=fileName;
     a.click();
     URL.revokeObjectURL(url);
   }

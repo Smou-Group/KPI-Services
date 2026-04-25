@@ -36,13 +36,22 @@ h1 {
 label {
   font-weight: bold;
   color: #0b3b82;
+  display: block;
+  margin-bottom: 5px;
 }
 
-input {
+input, select, textarea {
   width: 100%;
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-family: Tahoma, Arial;
+}
+
+input[readonly] {
+  background: #eef3f9;
+  font-weight: bold;
 }
 
 table {
@@ -67,25 +76,47 @@ td:nth-child(2) {
   font-weight: bold;
 }
 
-select {
-  padding: 6px;
-  border-radius: 6px;
+.check {
+  width: 22px;
+  height: 22px;
+}
+
+.notes {
+  margin-top: 20px;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 20px;
 }
 
 button {
-  width: 100%;
-  padding: 15px;
-  margin-top: 20px;
+  padding: 14px;
   background: #0b3b82;
   color: white;
   border: none;
   border-radius: 10px;
-  font-size: 18px;
+  font-size: 17px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 button:hover {
   background: #062b61;
+}
+
+.print-btn {
+  background: #198754;
+}
+
+.edit-btn {
+  background: #f59e0b;
+}
+
+.close-btn {
+  background: #dc3545;
 }
 
 .message {
@@ -94,8 +125,24 @@ button:hover {
   font-weight: bold;
 }
 
+@media print {
+  button, .message {
+    display: none;
+  }
+
+  body {
+    background: white;
+  }
+
+  .container {
+    box-shadow: none;
+    margin: 0;
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
-  .grid {
+  .grid, .buttons {
     grid-template-columns: 1fr;
   }
 }
@@ -104,25 +151,27 @@ button:hover {
 
 <body>
 
-<div class="container">
+<div class="container" id="reportArea">
+
 <h1>تقرير صيانة المصعد</h1>
 
 <form id="form">
 
 <div class="grid">
+
   <div>
     <label>التاريخ</label>
-    <input type="date" name="date" required>
+    <input type="text" name="date" id="date" readonly>
   </div>
 
   <div>
     <label>الوقت</label>
-    <input type="time" name="time" required>
+    <input type="text" name="time" id="time" readonly>
   </div>
 
   <div>
     <label>رقم التقرير</label>
-    <input type="text" name="reportNo" required>
+    <input type="text" name="reportNo" id="reportNo" readonly>
   </div>
 
   <div>
@@ -142,8 +191,16 @@ button:hover {
 
   <div>
     <label>الفني</label>
-    <input type="text" name="technician" required>
+    <select name="technician" required>
+      <option value="">اختر الفني</option>
+      <option value="احمد">احمد</option>
+      <option value="سيد">سيد</option>
+      <option value="محمد">محمد</option>
+      <option value="علي">علي</option>
+      <option value="خالد">خالد</option>
+    </select>
   </div>
+
 </div>
 
 <table>
@@ -151,14 +208,23 @@ button:hover {
 <tr>
   <th>م</th>
   <th>البند</th>
-  <th>الحالة</th>
+  <th>تم</th>
 </tr>
 </thead>
-
 <tbody id="items"></tbody>
 </table>
 
-<button type="submit">حفظ في Google Sheet</button>
+<div class="notes">
+  <label>ملاحظات</label>
+  <textarea name="notes" rows="5" placeholder="اكتب الملاحظات هنا..."></textarea>
+</div>
+
+<div class="buttons">
+  <button type="submit">حفظ</button>
+  <button type="button" class="print-btn" onclick="window.print()">طباعة PDF</button>
+  <button type="button" class="edit-btn" onclick="enableEdit()">تعديل</button>
+  <button type="button" class="close-btn" onclick="closePage()">إغلاق</button>
+</div>
 
 <div class="message" id="msg"></div>
 
@@ -194,26 +260,52 @@ const tbody = document.getElementById("items");
 list.forEach((item, i) => {
   tbody.innerHTML += `
   <tr>
-    <td>${i+1}</td>
+    <td>${i + 1}</td>
     <td>${item}</td>
     <td>
-      <select name="item${i+1}" required>
-        <option value="">اختر</option>
-        <option value="تم">✔ تم</option>
-        <option value="لم يتم">✖ لم يتم</option>
-        <option value="يحتاج متابعة">⚠ يحتاج متابعة</option>
-      </select>
+      <input class="check" type="checkbox" name="item${i + 1}" value="تم">
     </td>
   </tr>`;
 });
+
+function setDateTime() {
+  const now = new Date();
+  document.getElementById("date").value = now.toLocaleDateString("en-CA");
+  document.getElementById("time").value = now.toLocaleTimeString("ar-EG", {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
+function setReportNo() {
+  let lastNo = localStorage.getItem("lastReportNo");
+
+  if (!lastNo) {
+    lastNo = 2605000;
+  }
+
+  const newNo = Number(lastNo) + 1;
+  document.getElementById("reportNo").value = newNo;
+}
+
+setDateTime();
+setReportNo();
 
 document.getElementById("form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const msg = document.getElementById("msg");
+  msg.style.color = "#0b3b82";
   msg.innerHTML = "جاري الحفظ...";
 
-  const data = Object.fromEntries(new FormData(e.target).entries());
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData.entries());
+
+  for (let i = 1; i <= 18; i++) {
+    if (!data["item" + i]) {
+      data["item" + i] = "لم يتم";
+    }
+  }
 
   try {
     await fetch(SCRIPT_URL, {
@@ -223,15 +315,46 @@ document.getElementById("form").addEventListener("submit", async (e) => {
       body: JSON.stringify(data)
     });
 
+    localStorage.setItem("lastReportNo", document.getElementById("reportNo").value);
+
     msg.style.color = "green";
     msg.innerHTML = "✔ تم حفظ البيانات بنجاح";
-    e.target.reset();
+
+    disableForm();
 
   } catch (err) {
     msg.style.color = "red";
-    msg.innerHTML = "❌ حصل خطأ";
+    msg.innerHTML = "❌ حصل خطأ أثناء الحفظ";
   }
 });
+
+function disableForm() {
+  const fields = document.querySelectorAll("input, select, textarea");
+  fields.forEach(field => {
+    if (field.type !== "button" && field.type !== "submit") {
+      field.disabled = true;
+    }
+  });
+}
+
+function enableEdit() {
+  const fields = document.querySelectorAll("input, select, textarea");
+  fields.forEach(field => {
+    field.disabled = false;
+  });
+
+  document.getElementById("date").readOnly = true;
+  document.getElementById("time").readOnly = true;
+  document.getElementById("reportNo").readOnly = true;
+
+  document.getElementById("msg").style.color = "#f59e0b";
+  document.getElementById("msg").innerHTML = "يمكنك التعديل الآن";
+}
+
+function closePage() {
+  window.close();
+  document.body.innerHTML = "<h2 style='text-align:center;margin-top:80px;color:#0b3b82'>تم إغلاق التقرير</h2>";
+}
 </script>
 
 </body>

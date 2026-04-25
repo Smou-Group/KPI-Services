@@ -149,32 +149,33 @@ button{
   font-size:11px;
 }
 
-/* PDF */
+/* PDF FIXED A4 DESIGN */
 .pdf-temp{
   position:fixed;
   top:0;
-  right:0;
-  width:210mm;
+  left:0;
+  width:794px;
   background:white;
   z-index:999999;
   opacity:1;
 }
 
 .pdf-page{
-  width:210mm;
-  height:297mm;
-  padding:5mm;
+  width:794px;
+  height:1123px;
+  padding:22px;
   background:white;
   font-family:Tahoma,Arial,sans-serif;
   direction:rtl;
   color:#111827;
+  overflow:hidden;
 }
 
 .pdf-header{
   background:linear-gradient(135deg,#061b3a,#0b3b82);
   color:white;
-  border-radius:7px;
-  padding:6px 10px;
+  border-radius:10px;
+  padding:12px 16px;
   display:flex;
   justify-content:space-between;
   align-items:center;
@@ -183,132 +184,132 @@ button{
 .pdf-brand{
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:10px;
 }
 
 .pdf-logo{
-  width:36px;
-  height:36px;
+  width:48px;
+  height:48px;
   background:white;
-  border-radius:7px;
-  padding:3px;
+  border-radius:8px;
+  padding:4px;
   object-fit:contain;
 }
 
 .pdf-company{
-  font-size:14px;
+  font-size:18px;
   font-weight:bold;
 }
 
 .pdf-sub{
-  font-size:8px;
+  font-size:10px;
   color:#dbeafe;
 }
 
 .pdf-title{
-  font-size:16px;
+  font-size:20px;
   font-weight:bold;
 }
 
 .pdf-info{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:4px;
-  margin-top:6px;
+  gap:7px;
+  margin-top:10px;
 }
 
 .pdf-box{
   border:1px solid #cbd5e1;
-  border-radius:5px;
-  padding:4px;
-  min-height:24px;
+  border-radius:7px;
+  padding:7px;
+  min-height:46px;
 }
 
 .pdf-label{
-  font-size:7px;
+  font-size:10px;
   color:#475569;
 }
 
 .pdf-value{
-  font-size:9px;
+  font-size:12px;
   font-weight:bold;
-  margin-top:1px;
+  margin-top:3px;
 }
 
 .pdf-section{
-  margin-top:6px;
+  margin-top:10px;
   background:#061b3a;
   color:white;
-  padding:4px 8px;
-  border-radius:5px;
-  font-size:10px;
+  padding:7px 10px;
+  border-radius:7px;
+  font-size:13px;
   font-weight:bold;
 }
 
 .pdf-items-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:4px;
-  margin-top:5px;
+  gap:6px;
+  margin-top:7px;
 }
 
 .pdf-item{
   border:1px solid #cbd5e1;
-  border-radius:5px;
-  padding:3px 5px;
+  border-radius:7px;
+  padding:6px;
   display:grid;
-  grid-template-columns:7mm 1fr 15mm;
+  grid-template-columns:28px 1fr 55px;
   align-items:center;
-  gap:3px;
-  min-height:17px;
+  gap:5px;
+  min-height:34px;
 }
 
 .pdf-no{
   text-align:center;
-  font-size:7.5px;
+  font-size:11px;
   font-weight:bold;
   color:#0b3b82;
 }
 
 .pdf-text{
-  font-size:7.3px;
-  line-height:1.25;
+  font-size:10.5px;
+  line-height:1.35;
 }
 
 .pdf-status{
-  font-size:7.5px;
+  font-size:10.5px;
   text-align:center;
   font-weight:bold;
   color:#15803d;
 }
 
 .pdf-notes{
-  margin-top:6px;
+  margin-top:10px;
   border:1px solid #cbd5e1;
-  border-radius:5px;
-  padding:5px;
-  min-height:22px;
-  font-size:8px;
+  border-radius:7px;
+  padding:8px;
+  min-height:45px;
+  font-size:11px;
 }
 
 .pdf-sign{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:9px;
+  gap:25px;
+  margin-top:18px;
 }
 
 .pdf-sign div{
   border-top:1px solid #334155;
-  padding-top:4px;
-  font-size:8px;
+  padding-top:6px;
+  font-size:11px;
   text-align:center;
 }
 
 .pdf-footer{
-  margin-top:5px;
+  margin-top:10px;
   text-align:center;
-  font-size:7px;
+  font-size:9px;
   color:#64748b;
 }
 
@@ -495,6 +496,7 @@ async function createPDF(data,mode){
 
   items.forEach((item,index)=>{
     const status=data["item"+(index+1)]==="تم" ? "✓ تم" : "لم يتم";
+
     itemCards+=`
       <div class="pdf-item">
         <div class="pdf-no">${index+1}</div>
@@ -535,6 +537,7 @@ async function createPDF(data,mode){
       </div>
 
       <div class="pdf-section">بنود الفحص والصيانة</div>
+
       <div class="pdf-items-grid">
         ${itemCards}
       </div>
@@ -558,7 +561,7 @@ async function createPDF(data,mode){
 
   document.body.appendChild(wrapper);
 
-  await new Promise(resolve=>setTimeout(resolve,700));
+  await new Promise(resolve=>setTimeout(resolve,800));
 
   const element=document.getElementById("pdfPage");
 
@@ -569,14 +572,16 @@ async function createPDF(data,mode){
     html2canvas:{
       scale:2,
       useCORS:true,
-      scrollX:0,
-      scrollY:0,
+      width:794,
+      height:1123,
       windowWidth:794,
-      windowHeight:1123
+      windowHeight:1123,
+      scrollX:0,
+      scrollY:0
     },
     jsPDF:{
-      unit:"mm",
-      format:"a4",
+      unit:"px",
+      format:[794,1123],
       orientation:"portrait"
     },
     pagebreak:{mode:["avoid-all"]}

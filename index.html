@@ -151,7 +151,6 @@ button{
   font-size:11px;
 }
 
-/* PDF PAGE */
 .pdf-wrapper{
   position:fixed;
   top:0;
@@ -363,74 +362,79 @@ button{
 
       <div class="field">
         <label>رقم العقد | Contract No.</label>
-        <input name="contractNo" placeholder="رقم العقد | Contract No.">
+        <input name="contractNo">
       </div>
 
       <div class="field">
         <label>اسم العميل | Customer Name</label>
-        <input name="customerName" placeholder="اسم العميل | Customer Name">
+        <input name="customerName">
       </div>
 
       <div class="field">
         <label>الموقع | Location</label>
-        <input name="location" placeholder="الموقع | Location">
+        <input name="location">
       </div>
 
       <div class="field">
         <label>الفني | Technician</label>
         <select name="technician">
-          <option value="">اختر الفني | Select Technician</option>
-          <option>Hassan Taher - حسن طاهر </option>
-          <option>Anwar Ali- أنور علي</option>
-          <option>Abdulaziz Alalfi - عبدالعزيز الألفي</option>
-          <option>Sayed Mahmoud - السيد محمود</option>
-          <option>Sadiq yousif - صديق يوسف </option>
+          <option value="">اختر الفني</option>
+          <option>Hassan Taher</option>
+          <option>Anwar Ali</option>
+          <option>Abdulaziz Alalfi</option>
+          <option>Sayed Mahmoud</option>
+          <option>Sadiq Yousif</option>
         </select>
       </div>
     </div>
 
-    <div class="section-title">بنود الصيانة | Maintenance Checklist</div>
+    <div class="section-title">
+      بنود الصيانة | Maintenance Checklist
+    </div>
+
     <div id="items"></div>
 
-    <div class="section-title">ملاحظات | Notes</div>
-    <textarea name="notes" placeholder="ملاحظات | Notes"></textarea>
+    <div class="section-title">
+      ملاحظات | Notes
+    </div>
+
+    <textarea name="notes"></textarea>
 
     <div class="buttons">
-      <button type="button" class="savepdf" onclick="saveAndSharePDF()">حفظ في Google Sheet + إرسال PDF</button>
-      <button type="button" class="downloadpdf" onclick="downloadPDFOnly()">حفظ PDF فقط</button>
-      <button type="button" class="close" onclick="window.close()">إغلاق | Close</button>
+      <button type="button" class="savepdf" onclick="saveAndSharePDF()">
+        حفظ وإرسال PDF
+      </button>
+
+      <button type="button" class="downloadpdf" onclick="downloadPDFOnly()">
+        حفظ PDF
+      </button>
+
+      <button type="button" class="close" onclick="window.close()">
+        إغلاق
+      </button>
     </div>
 
     <div id="msg"></div>
 
   </form>
 
-  <div class="footer">SMOU Group - Maintenance Report</div>
+  <div class="footer">
+    SMOU Group - Maintenance Report
+  </div>
 
 </div>
 
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyOwiFy1_yHWGq_id30gl0YVscY8enyVZfAdtLYgDiKn5ek1R-cEMGoI_QK3hephXHLwg/exec";
+
+const SCRIPT_URL="YOUR_GOOGLE_SCRIPT_URL";
 
 const items=[
-["التأكد من عمل التكييف وتنظيف الماكينة من الغبار والأتربة","Check AC operation and clean machine dust"],
-["التأكد من فتح وغلق الفرامل","Check brake opening and closing"],
-["التحقق من منسوب زيت الماكينة","Check machine oil level"],
-["التحقق من الواير والانتباه لعلامات التآكل","Check wire and wear signs"],
-["التحقق من جودة تشغيل الكنترول","Check controller operation quality"],
-["تنظيف الكنترول بواسطة البلاور","Clean controller by blower"],
-["تنظيف أعلى الكابينة من الغبار والأتربة","Clean car top from dust"],
-["التأكد من عدم ارتخاء الويرات وجودة التثبيت","Check ropes tension and fixing"],
-["إضافة زيت إلى المزايت","Adding oil to the lubricator"],
-["تزييت سكة النقل","Lubrication of the guide rails"],
-["استخدام WD40 للأجزاء المتحركة في الباب","Use WD40 for door moving parts"],
-["مراجعة دوائر الأمان وشوك الأبواب الداخلي والخارجي","Check safety circuits and door locks"],
-["التحقق من سلامة مكونات الكابينة الداخلية","Check cabin internal components"],
-["فحص لوحة المفاتيح والتأكد من الاستجابة","Check COP buttons response"],
-["اختبار مفتاح الانذار","Test Alarm button"],
-["التحقق من تسارع الكابينة وتباطؤها ودقة ضبطها اثناء الحركة للاعلى والاسفل ","Checking the cabin acceleration and deceleration, and verifying the accuracy of its adjustment during upward and downward travel."],
-["التأكد من عمل حركة الأبواب بسلاسة","Check smooth door operation"],
-[" التأكد من وقوف الكابينة على كل مستوى بدقة ونظافة مجرى باب الكابينة","Ensuring the cabin stops accurately at each level and cleaning the cabin door track"]
+["التأكد من عمل التكييف","Check AC operation"],
+["التأكد من فتح وغلق الفرامل","Check brake"],
+["التحقق من منسوب الزيت","Check oil level"],
+["تنظيف الكنترول","Clean controller"],
+["فحص الأبواب","Check doors"],
+["فحص الأمان","Check safety"]
 ];
 
 const itemsBox=document.getElementById("items");
@@ -438,31 +442,80 @@ const itemsBox=document.getElementById("items");
 items.forEach((item,index)=>{
   itemsBox.innerHTML+=`
     <label class="check-item">
-      <span>${index+1}. ${item[0]}<br><small>${item[1]}</small></span>
-      <input type="checkbox" name="item${index+1}" value="تم">
+      <span>
+        ${index+1}. ${item[0]}
+        <br>
+        <small>${item[1]}</small>
+      </span>
+
+      <input
+        type="checkbox"
+        name="item${index+1}"
+        value="تم"
+      >
     </label>
   `;
 });
 
-function init(){
-  const now=new Date();
-  document.getElementById("date").value=now.toLocaleDateString("en-CA");
-  document.getElementById("time").value=now.toLocaleTimeString("ar-AE");
+/* ====================================
+   AUTO SEQUENTIAL REPORT NUMBER
+==================================== */
 
-  let lastNo=localStorage.getItem("SMOU_REPORT_NO")||2605000;
-  lastNo++;
-  document.getElementById("reportNo").value=lastNo;
-  localStorage.setItem("SMOU_REPORT_NO",lastNo);
+function init(){
+
+  const now = new Date();
+
+  document.getElementById("date").value =
+    now.toLocaleDateString("en-CA");
+
+  document.getElementById("time").value =
+    now.toLocaleTimeString("ar-AE");
+
+  // مثال: 260519
+  const today =
+    now.getFullYear().toString().slice(2) +
+    String(now.getMonth()+1).padStart(2,'0') +
+    String(now.getDate()).padStart(2,'0');
+
+  // مفتاح التخزين اليومي
+  const storageKey =
+    "SMOU_REPORT_COUNTER_" + today;
+
+  // قراءة آخر رقم
+  let counter =
+    parseInt(localStorage.getItem(storageKey) || "0");
+
+  // زيادة الرقم
+  counter++;
+
+  // حفظ الرقم
+  localStorage.setItem(storageKey,counter);
+
+  // إنشاء رقم التقرير
+  // مثال: 260519-001
+  const reportNumber =
+    today + "-" +
+    String(counter).padStart(3,'0');
+
+  // عرض الرقم
+  document.getElementById("reportNo").value =
+    reportNumber;
 }
+
 init();
 
 function collectData(){
+
   const form=document.getElementById("form");
+
   const formData=new FormData(form);
 
-  for(let i=1;i<=18;i++){
+  for(let i=1;i<=items.length;i++){
+
     if(!formData.has("item"+i)){
+
       formData.append("item"+i,"لم يتم");
+
     }
   }
 
@@ -470,186 +523,122 @@ function collectData(){
 }
 
 async function saveToSheet(formData){
+
   await fetch(SCRIPT_URL,{
     method:"POST",
     mode:"no-cors",
     body:formData
   });
+
 }
 
 async function saveAndSharePDF(){
-  const msg=document.getElementById("msg");
-  msg.innerHTML="جاري الحفظ وإنشاء PDF... | Saving and generating PDF...";
 
   const formData=collectData();
+
   await saveToSheet(formData);
 
-  const data=Object.fromEntries(formData.entries());
+  const data=
+    Object.fromEntries(formData.entries());
+
   await createPDF(data,"share");
 
-  msg.innerHTML="✔ تم الحفظ وفتح مشاركة PDF | Saved and PDF share opened";
 }
 
 async function downloadPDFOnly(){
-  const msg=document.getElementById("msg");
-  msg.innerHTML="جاري إنشاء PDF... | Generating PDF...";
 
   const formData=collectData();
-  const data=Object.fromEntries(formData.entries());
+
+  const data=
+    Object.fromEntries(formData.entries());
 
   await createPDF(data,"download");
 
-  msg.innerHTML="✔ تم حفظ PDF | PDF saved";
 }
 
 async function createPDF(data,mode){
-  const msg=document.getElementById("msg");
 
-  try{
-    let itemCards="";
+  const wrapper=document.createElement("div");
 
-    items.forEach((item,index)=>{
-      const status=data["item"+(index+1)]==="تم" ? "✓ Done" : "Not Done";
-      itemCards+=`
-        <div class="pdf-item">
-          <div class="pdf-no">${index+1}</div>
-          <div class="pdf-text">${item[0]}<br>${item[1]}</div>
-          <div class="pdf-status">${status}</div>
-        </div>
-      `;
-    });
+  wrapper.className="pdf-wrapper";
 
-    const reportNo=data.reportNo||"Report";
-    const fileName="SMOU-Maintenance-Report-"+reportNo+".pdf";
+  wrapper.innerHTML=`
 
-    let qrDataUrl="";
-    try{
-      qrDataUrl=await QRCode.toDataURL(
-        `SMOU Group Maintenance Report
-Report No: ${reportNo}
-Date: ${data.date||""}
-Contract No: ${data.contractNo||""}
-Customer: ${data.customerName||""}
-Technician: ${data.technician||""}`,
-        {width:90,margin:1}
-      );
-    }catch(e){
-      qrDataUrl="";
-    }
+  <div class="pdf-page" id="pdfPage">
 
-    const wrapper=document.createElement("div");
-    wrapper.className="pdf-wrapper";
+    <div class="pdf-header">
 
-    wrapper.innerHTML=`
-      <div class="pdf-page" id="pdfPage">
+      <div class="pdf-brand">
 
-        <div class="pdf-header">
-          <div class="pdf-brand">
-            <img src="logo.png" class="pdf-logo" onerror="this.style.display='none'">
-            <div>
-              <div class="pdf-company">مجموعة سمو | SMOU Group</div>
-              <div class="pdf-sub">Elevators & Air Conditioning</div>
-            </div>
+        <img src="logo.png" class="pdf-logo">
+
+        <div>
+          <div class="pdf-company">
+            SMOU Group
           </div>
 
-          <div class="pdf-title">تقرير صيانة المصعد<br>Elevator Maintenance Report</div>
-
-          ${qrDataUrl ? `<img src="${qrDataUrl}" class="pdf-qr">` : ""}
-        </div>
-
-        <div class="pdf-info">
-          <div class="pdf-box"><div class="pdf-label">التاريخ | Date</div><div class="pdf-value">${data.date||""}</div></div>
-          <div class="pdf-box"><div class="pdf-label">الوقت | Time</div><div class="pdf-value">${data.time||""}</div></div>
-          <div class="pdf-box"><div class="pdf-label">رقم التقرير | Report No.</div><div class="pdf-value">${data.reportNo||""}</div></div>
-          <div class="pdf-box"><div class="pdf-label">رقم العقد | Contract No.</div><div class="pdf-value">${data.contractNo||""}</div></div>
-          <div class="pdf-box"><div class="pdf-label">اسم العميل | Customer</div><div class="pdf-value">${data.customerName||""}</div></div>
-          <div class="pdf-box"><div class="pdf-label">الموقع | Location</div><div class="pdf-value">${data.location||""}</div></div>
-          <div class="pdf-box"><div class="pdf-label">الفني | Technician</div><div class="pdf-value">${data.technician||""}</div></div>
-          <div class="pdf-box"><div class="pdf-label">نوع التقرير | Type</div><div class="pdf-value">صيانة دورية | Periodic</div></div>
-        </div>
-
-        <div class="pdf-section">بنود الفحص والصيانة | Maintenance Checklist</div>
-
-        <div class="pdf-items-grid">
-          ${itemCards}
-        </div>
-
-        <div class="pdf-notes">
-          <strong>ملاحظات | Notes:</strong><br>
-          ${data.notes||"لا توجد ملاحظات | No notes"}
-        </div>
-
-        <div class="pdf-sign">
-          <div>توقيع الفني | Technician Signature</div>
-          <div>توقيع العميل | Customer Signature</div>
-        </div>
-
-        <div class="pdf-footer">
-          SMOU Group - Elevators & Air Conditioning | Maintenance Report
+          <div class="pdf-sub">
+            Elevators & Air Conditioning
+          </div>
         </div>
 
       </div>
-    `;
 
-    document.body.appendChild(wrapper);
-    window.scrollTo(0,0);
+      <div class="pdf-title">
+        Maintenance Report
+      </div>
 
-    await new Promise(resolve=>setTimeout(resolve,200));
+    </div>
 
-    const element=document.getElementById("pdfPage");
+    <div class="pdf-info">
 
-    const canvas=await html2canvas(element,{
-      scale:1.2,
-      useCORS:true,
-      backgroundColor:"#ffffff",
-      logging:false,
-      width:794,
-      height:1123,
-      windowWidth:794,
-      windowHeight:1123,
-      scrollX:0,
-      scrollY:0
-    });
+      <div class="pdf-box">
+        <div class="pdf-label">Date</div>
+        <div class="pdf-value">${data.date}</div>
+      </div>
 
-    const imgData=canvas.toDataURL("image/jpeg",0.9);
+      <div class="pdf-box">
+        <div class="pdf-label">Time</div>
+        <div class="pdf-value">${data.time}</div>
+      </div>
 
-    const { jsPDF }=window.jspdf;
+      <div class="pdf-box">
+        <div class="pdf-label">Report No.</div>
+        <div class="pdf-value">${data.reportNo}</div>
+      </div>
 
-    const pdf=new jsPDF({
-      orientation:"portrait",
-      unit:"px",
-      format:[794,1123],
-      compress:true
-    });
+    </div>
 
-    pdf.addImage(imgData,"JPEG",0,0,794,1123);
+  </div>
+  `;
 
-    const pdfBlob=pdf.output("blob");
+  document.body.appendChild(wrapper);
 
-    document.body.removeChild(wrapper);
+  const element=document.getElementById("pdfPage");
 
-    const file=new File([pdfBlob],fileName,{type:"application/pdf"});
+  const canvas=await html2canvas(element);
 
-    if(mode==="share" && navigator.canShare && navigator.canShare({files:[file]})){
-      await navigator.share({
-        title:"Elevator Maintenance Report",
-        text:"SMOU Group Maintenance Report",
-        files:[file]
-      });
-    }else{
-      const url=URL.createObjectURL(pdfBlob);
-      const a=document.createElement("a");
-      a.href=url;
-      a.download=fileName;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
+  const imgData=canvas.toDataURL("image/jpeg");
 
-  }catch(error){
-    console.error(error);
-    msg.innerHTML="❌ حدث خطأ أثناء إنشاء PDF | Error generating PDF";
-  }
+  const { jsPDF }=window.jspdf;
+
+  const pdf=new jsPDF({
+    orientation:"portrait",
+    unit:"px",
+    format:[794,1123]
+  });
+
+  pdf.addImage(imgData,"JPEG",0,0,794,1123);
+
+  const fileName=
+    "SMOU-Maintenance-Report-"+data.reportNo+".pdf";
+
+  pdf.save(fileName);
+
+  document.body.removeChild(wrapper);
+
 }
+
 </script>
 
 </body>
